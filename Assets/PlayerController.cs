@@ -8,7 +8,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
    [Header("점프 기능")]     // 유니티에서 섹션 나눠줌
-
    [SerializeField] Rigidbody2D rigid;
    [SerializeField] [Range(0, 20f)] float jumpSpeed;
    [SerializeField] AudioSource jumpSound;
