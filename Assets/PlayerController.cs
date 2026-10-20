@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
    [Header("게임 오버")]
    [SerializeField] AudioSource dieSound;
 
-   private void Awake()
+   private void Awake()     // 시작하기 전부터 활성화
    {
         rigid = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
 
    private void Update()
    {
-        if (Input.GetButtonDown("Jump") && jumpCount <= 1)
+        if (Input.GetButtonDown("Jump") && jumpCount <= 1)      // 점프 버튼을 누르고 더블점프가 아닐때
         {
             Jump();
         }
@@ -36,44 +36,44 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        rigid.linearVelocityY = jumpSpeed;
-        jumpSound.Play();
-        jumpCount++;        
+        rigid.linearVelocityY = jumpSpeed;      // 위로 스피드 주기
+        jumpSound.Play();       // 점프 사운드 플레이하고
+        jumpCount++;        // 점프카운트 증가(더블점프 용)
     }
 
     private void Die()
     {
-        animator.SetTrigger("Die");
+        animator.SetTrigger("Die");     // 죽는 애니메이션 실행
         // rigid.linearVelocity = Vector2.zero;
         rigid.simulated = false;
-        dieSound.Play();
+        dieSound.Play();        // 죽는 사운드 플레이
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)      // 닿았을때
         {            
-            if (collision.collider.tag == "Platform")
+            if (collision.collider.tag == "Platform")   // 닿은게 플랫폼일때
             {
-                isGrounded = true;
-                jumpCount = 0;
-                animator.SetBool("Grounded", true);
+                isGrounded = true;      // 닿았음 트루
+                jumpCount = 0;          // 점프카운트 0으로 초기화 => 다시 점프 가능
+                animator.SetBool("Grounded", true);     // 애니메이터에 있는 트리거 발동
             }
             
             
         }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnCollisionExit2D(Collision2D collision)       // 떨어졌을 때
     {       
-        if (collision.collider.tag == "Platform")
+        if (collision.collider.tag == "Platform")       // 떨어진게 플랫폼일때
         {
-            isGrounded = false;
+            isGrounded = false;     // 닿았음 X
             animator.SetBool("Grounded", false);         // 그냥 땅을 걸어가다가 떨어졌을때도 점프모션재생
         } 
               
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision) // 장애물에 닿았을때 
     {
-        if (collision.tag == "Dead")
+        if (collision.tag == "Dead")    // Dead 태그 붙은거 (데드존이랑 장애물)
         {
             Die();
         }

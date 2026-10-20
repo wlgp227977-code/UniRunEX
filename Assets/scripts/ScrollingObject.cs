@@ -6,6 +6,6 @@ public class ScrollingObject : MonoBehaviour
 
     private void Update()
     {        
-        transform.Translate(Vector3.left * speed * Time.deltaTime, Space.World);      //이동량
-    }
+        transform.Translate(Vector3.left * speed * Time.deltaTime, Space.World);      
+    }               //이동량
 }
