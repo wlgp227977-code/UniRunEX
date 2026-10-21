@@ -2,10 +2,22 @@ using UnityEngine;
 
 public class ScrollingObject : MonoBehaviour
 {
-    public float speed = 10f;
+    public float speed = 6f;
+
+    private GameManager gameManager;
+
+    private void Start()
+    {
+        GameObject findGo = GameObject.FindWithTag("GameController");
+        gameManager = findGo.GetComponent<GameManager>();
+    }
 
     private void Update()
     {        
-        transform.Translate(Vector3.left * speed * Time.deltaTime, Space.World);      
-    }               //이동량
+        if (gameManager.IsGameOver)
+        {
+            return;
+        }
+        transform.Translate(Vector3.left * speed * Time.deltaTime, Space.World);      //이동량
+    }               
 }

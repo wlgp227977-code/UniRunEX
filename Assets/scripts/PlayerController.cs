@@ -8,17 +8,23 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
    [Header("점프 기능")]     // 유니티에서 섹션 나눠줌
-   [SerializeField] Rigidbody2D rigid;
+   [SerializeField] 
+   private Rigidbody2D rigid;
    [SerializeField] [Range(0, 20f)] float jumpSpeed;
-   [SerializeField] AudioSource jumpSound;
-   [SerializeField] bool isGrounded;  
-   [SerializeField] int jumpCount;  
-
-   [Header("애니메이션")]
-   [SerializeField] Animator animator;
+   [SerializeField] 
+   private AudioSource jumpSound;
+   [SerializeField] 
+   private bool isGrounded;  
+   [SerializeField] 
+   private int jumpCount;  
+    [SerializeField] 
+   private Animator animator;
 
    [Header("게임 오버")]
-   [SerializeField] AudioSource dieSound;
+   [SerializeField] 
+   private AudioSource dieSound;
+
+   private GameManager gameManager;
 
    private void Awake()     // 시작하기 전부터 활성화
    {
@@ -26,9 +32,15 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
    }
 
+   private void Start()
+   {
+        GameObject findGo = GameObject.FindWithTag("GameController");
+        gameManager = findGo.GetComponent<GameManager>();
+   }
+
    private void Update()
    {
-        if (Input.GetButtonDown("Jump") && jumpCount <= 1)      // 점프 버튼을 누르고 더블점프가 아닐때
+        if (Input.GetMouseButtonDown(0) && jumpCount <= 1)      // 점프 버튼을 누르고 더블점프가 아닐때
         {
             Jump();
         }
@@ -47,11 +59,14 @@ public class PlayerController : MonoBehaviour
         // rigid.linearVelocity = Vector2.zero;
         rigid.simulated = false;
         dieSound.Play();        // 죽는 사운드 플레이
+
+        gameManager.OnPlayerDead();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)      // 닿았을때
         {            
-            if (collision.collider.tag == "Platform")   // 닿은게 플랫폼일때
+            if (collision.collider.tag == "Platform" &&
+                collision.contacts[0].normal.y > 0.7f)   // 닿은게 플랫폼이고 충돌한 부분이 윗면인지
             {
                 isGrounded = true;      // 닿았음 트루
                 jumpCount = 0;          // 점프카운트 0으로 초기화 => 다시 점프 가능
